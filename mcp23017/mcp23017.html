@@ -1,3 +1,4 @@
+
 <script type="text/x-red" data-template-name="mcp23017">
     <div class="form-row">
         <label for="node-input-topic"><i class="fa fa-tasks"></i> Topic</label>
@@ -23,13 +24,13 @@
     </div>
 </script>
 
-
 <script type="text/x-red" data-help-name="mcp23017">
    <p><b>MSP23017</b> Output node, control the pins via topic and playload.</p>
    <p><b>Address:</b>  0x20 (default) or similar.</p>
    <p><b>Device:</b> /dev/i2c-1 (default), but may need to be changed to /dev/i2c-0 depending on your Raspberry PI.</p>
    <p><b>Topic:</b> set to the root of the status topic, e.g. 'devices/status', a status message will be generated per pin 0..15.</p>
 </script>
+
 <script type="text/javascript">
 	RED.nodes.registerType('mcp23017', {
 		category : "Raspberry Pi",

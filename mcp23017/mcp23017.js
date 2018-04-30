@@ -22,21 +22,16 @@ module.exports = function(RED) {
 
 	function mcp23017_Node(config) {
 		RED.nodes.createNode(this, config);
-
 		this.topic = config.topic;
 		if (this.topic.endsWith("/") == false)
 			this.topic += '/';
-
 		var node = this;
-
 		var icAddress = parseInt(config.address);
-
 		var mcp = new MCP({
 			address : icAddress, // all address pins pulled low
 			device : config.device, // Model B
 			debug : false
 		});
-
 		// set all GPIOS to be OUTPUTS
 		for (var i = 0; i < 16; i++) {
 			mcp.pinMode(i, mcp.OUTPUT);
@@ -44,39 +39,36 @@ module.exports = function(RED) {
 		}
 
 		this
-				.on(
-						'input',
-						function(msg) {
-							this.status({
-								fill : "red",
-								shape : "dot",
-								text : "Busy`"
-							});
-							if (msg.topic.toUpperCase().indexOf('ALL') > -1) {
-								mcp23017_set_all_outputs(msg.payload);
-								send_status_message("ALL", node.topic + pin,
-										msg.payload);
-							} else if (msg.topic.toUpperCase()
-									.indexOf('STATUS') > -1) {
-								mcp23017_send_status();
-							} else {
-								var pin = get_pin_from_topic(msg.topic);
-								if (pin >= 0 && pin < 16) {
-									mcp23017_process(pin, msg.payload);
-									send_status_message(pin, node.topic + pin,
-											msg.payload);
-								} else {
-									node
-											.warn("Topic should contain a valid pin in the rannge 0..15: ["
-													+ msg.topic + "]");
-								}
-							}
-							this.status({
-								fill : "green",
-								shape : "dot",
-								text : "Ready"
-							});
-						});
+			.on(
+				'input',
+				function(msg) {
+					this.status({
+						fill : "red",
+						shape : "dot",
+						text : "Busy`"
+					});
+					if (msg.topic.toUpperCase().indexOf('ALL') > -1) {
+						mcp23017_set_all_outputs(msg.payload);
+						send_status_message("ALL", node.topic + pin, msg.payload);
+					} else if (msg.topic.toUpperCase()
+							.indexOf('STATUS') > -1) {
+						mcp23017_send_status();
+					} else {
+						var pin = get_pin_from_topic(msg.topic);
+						if (pin >= 0 && pin < 16) {
+							mcp23017_process(pin, msg.payload);
+							send_status_message(pin, node.topic + pin, msg.payload);
+						} else {
+							node
+								.warn("Topic should contain a valid pin in the rannge 0..15: [" + msg.topic + "]");
+						}
+					}
+					this.status({
+						fill : "green",
+						shape : "dot",
+						text : "Ready"
+					});
+				});
 
 		function send_status_message(pin, topic, state) {
 			var statusMsg = {}
@@ -115,7 +107,8 @@ module.exports = function(RED) {
 			var index = parts.length - 1;
 			return parseInt(parts[index]);
 		}
-	}
+	}  // function mcp23017_Node(config)
 
 	RED.nodes.registerType("mcp23017", mcp23017_Node);
-}
+}  // module.exports = function(RED) {
+
